@@ -7,12 +7,7 @@ function fish_prompt
     set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
   end
   if not set -q __fish_prompt_char
-    switch (id -u)
-      case 0
-        set -g __fish_prompt_char \u276f\u276f
-      case '*'
-        set -g __fish_prompt_char »
-    end
+      set -g __fish_prompt_char "⋊>"
   end
 
   # Setup colors
@@ -34,12 +29,17 @@ function fish_prompt
     set pcolor $bred
   end
 
+  set -l rb_ver "rb"(ruby --version | cut -d ' ' -f 2)
+  set -l py_ver "py"(python --version 2>&1 | cut -d ' ' -f 2)
+
   # Top
-  echo -n $cyan$USER$normal at $yellow$__fish_prompt_hostname$normal in $bred(prompt_pwd)$normal
+  echo -n $cyan'┌'[(date '+%H:%M:%S')] $bred(prompt_pwd)$normal
   __fish_git_prompt
+  echo -n " | "
+  echo -n $rb_ver $py_ver
 
   echo
 
   # Bottom
-  echo -n $pcolor$__fish_prompt_char $normal
+  echo -n $cyan'└'$__fish_prompt_char $normal
 end
